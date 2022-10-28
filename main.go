@@ -2,10 +2,8 @@ package main
 
 import (
 	"database/sql"
-	"html/template"
-
-	//"log"
 	"fmt"
+	"html/template"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -35,6 +33,8 @@ func main() {
 	http.HandleFunc("/insertar", Insertar)
 	http.HandleFunc("/borrar", Borrar)
 	http.HandleFunc("/editar", Editar)
+	//Para integrar un nuevo directorio local en el proyecto
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	fmt.Println("Running Service...")
 
