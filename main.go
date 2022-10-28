@@ -62,6 +62,7 @@ func Editar(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println(empleado)
+	plantillas.ExecuteTemplate(w, "editar", empleado)
 
 }
 
