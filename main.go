@@ -33,12 +33,36 @@ func main() {
 	http.HandleFunc("/", Inicio)
 	http.HandleFunc("/crear", Crear)
 	http.HandleFunc("/insertar", Insertar)
-
 	http.HandleFunc("/borrar", Borrar)
+	http.HandleFunc("/editar", Editar)
 
 	fmt.Println("Running Service...")
 
 	http.ListenAndServe(":8080", nil)
+}
+
+// Funccion editar
+func Editar(w http.ResponseWriter, r *http.Request) {
+	idEmpleado := r.URL.Query().Get("id")
+	fmt.Println(idEmpleado)
+	conexionEstablecida := conexionBD()
+
+	registros, err := conexionEstablecida.Query("SELECT * FROM empleados WHERE id=?", idEmpleado)
+	empleado := Empleado{}
+	for registros.Next() {
+		var id int
+		var nombre, correo string
+		err = registros.Scan(&id, &nombre, &correo)
+		if err != nil {
+			panic(err.Error())
+		}
+		empleado.Id = id
+		empleado.Nombre = nombre
+		empleado.Correo = correo
+	}
+
+	fmt.Println(empleado)
+
 }
 
 // Funcion borrar
