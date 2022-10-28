@@ -1,6 +1,6 @@
 {{ define "inicio" }}
 {{ template "cabecera" }}
-    //Boton para agregar empleados 
+    <!--Boton para agregar empleados -->
      <a name="" id="" class="btn btn-primary" href="/crear" role="button">Agregar empleados</a>
 
     <table class="table">
@@ -18,7 +18,12 @@
                 <td> {{.Id}} </td>
                 <td> Modavidc el poderoso {{.Nombre}} </td>
                 <td> moisesdavidc@gmail.com {{.Correo}} </td>
-                <td>Editar {{.Id}} | Borrar {{.Id}} </td>
+                <td>Editar {{.Id}} |                     
+                <!--Boton borrar       -->
+                <a name="" id="" class="btn btn-danger" href="/borrar?id={{.Id}}" role="button">Borrar</a>
+                
+             
+                </td>
             </tr>
     {{end}}
             

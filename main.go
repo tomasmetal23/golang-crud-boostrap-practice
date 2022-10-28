@@ -34,9 +34,29 @@ func main() {
 	http.HandleFunc("/crear", Crear)
 	http.HandleFunc("/insertar", Insertar)
 
+	http.HandleFunc("/borrar", Borrar)
+
 	fmt.Println("Running Service...")
 
 	http.ListenAndServe(":8080", nil)
+}
+
+// Funcion borrar
+func Borrar(w http.ResponseWriter, r *http.Request) {
+	idEmpleado := r.URL.Query().Get("id")
+	fmt.Println(idEmpleado)
+
+	conexionEstablecida := conexionBD()
+	//Instruccion SQL para borrar
+	borrarRegistros, err := conexionEstablecida.Prepare("DELETE FROM empleados WHERE id=?")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	insertarRegistros.Exec(idEmpleado)
+
+	http.Redirect(w, r, "/", 301)
+
 }
 
 type Empleado struct {
@@ -71,7 +91,7 @@ func Inicio(w http.ResponseWriter, r *http.Request) {
 		arregloEmpleado = append(arregloEmpleado, empleado)
 
 	}
-	fmt.Println(arregloEmpleado)
+	//para mostrar el arreglo empleado en la consola ##fmt.Println(arregloEmpleado)
 
 	//fmt.Fprintf(w, "Hello Saiyans!!!")
 	plantillas.ExecuteTemplate(w, "inicio", arregloEmpleado)
