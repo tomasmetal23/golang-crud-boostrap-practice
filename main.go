@@ -102,6 +102,8 @@ func Crear(w http.ResponseWriter, r *http.Request) {
 	plantillas.ExecuteTemplate(w, "crear", nil)
 
 }
+
+// funccion que inserta datos con el metodo "POST" desde un formulario a la BD
 func Insertar(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
@@ -110,7 +112,7 @@ func Insertar(w http.ResponseWriter, r *http.Request) {
 
 		conexionEstablecida := conexionBD()
 
-		insertarRegistros, err := conexionEstablecida.Prepare("INSERT INTO empleados(nombre,correo) VALUES('?','?') ")
+		insertarRegistros, err := conexionEstablecida.Prepare("INSERT INTO empleados(nombre,correo) VALUES(?,?) ")
 
 		if err != nil {
 			panic(err.Error())
