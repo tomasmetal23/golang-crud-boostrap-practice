@@ -53,7 +53,7 @@ func Borrar(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err.Error())
 	}
-	insertarRegistros.Exec(idEmpleado)
+	borrarRegistros.Exec(idEmpleado)
 
 	http.Redirect(w, r, "/", 301)
 
