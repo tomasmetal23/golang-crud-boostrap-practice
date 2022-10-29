@@ -16,7 +16,7 @@ func conexionBD() (conexion *sql.DB) {
 	Password := "nEis4bGZe"
 	Nombre := "crud"
 
-	conexion, err := sql.Open(Driver, Usuario+":"+Password+"@tcp(10.89.2.2)/"+Nombre)
+	conexion, err := sql.Open(Driver, Usuario+":"+Password+"@tcp(10.89.2.3)/"+Nombre)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -58,7 +58,8 @@ func Inicio(w http.ResponseWriter, r *http.Request) {
 	for registros.Next() {
 		var id int
 		var nombre, correo string
-		err = registros.Scan(&id, &nombre, &correo)
+		var fired_at sql.NullString
+		err = registros.Scan(&id, &nombre, &correo, &fired_at)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -134,7 +135,8 @@ func Editar(w http.ResponseWriter, r *http.Request) {
 	for registros.Next() {
 		var id int
 		var nombre, correo string
-		err = registros.Scan(&id, &nombre, &correo)
+		var fired_at sql.NullString
+		err = registros.Scan(&id, &nombre, &correo, &fired_at)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -167,7 +169,8 @@ func Borrar(w http.ResponseWriter, r *http.Request) {
 }
 
 type Empleado struct {
-	Id     int
-	Nombre string
-	Correo string
+	Id       int
+	Nombre   string
+	Correo   string
+	fired_at string
 }
