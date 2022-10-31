@@ -1,0 +1,30 @@
+{{ define "desempleados" }}
+{{ template "cabecera" }}
+    <!--Boton para agregar empleados 
+<a name="" id="" class="btn btn-primary" href="/crear" role="button">Agregar empleados</a>
+<br/><br/> -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+    {{ range.}}
+            <tr>
+                <td> {{.Id}} </td>
+                <td> {{.Nombre}} </td>
+                <td> {{.Correo}} </td>
+                <td>
+                <a name="" id="" class="btn btn-success" href="/recontratar?id={{.Id}}" role="button">Recontratar</a>
+                
+            </tr>
+    {{end}}
+            
+        </tbody>
+    </table>
+{{ template "pie" }}
+{{end}}

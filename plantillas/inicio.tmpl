@@ -1,8 +1,11 @@
 {{ define "inicio" }}
 {{ template "cabecera" }}
     <!--Boton para agregar empleados -->
-     <a name="" id="" class="btn btn-primary" href="/crear" role="button">Agregar empleados</a>
+<a name="" id="" class="btn btn-primary" href="/crear" role="button">Agregar empleados</a>
+
+<a name="" id="" class="btn btn-info float-right" href="/desempleados" role="button">Ver desempleados</a>
 <br/><br/>
+
     <table class="table">
         <thead>
             <tr>
@@ -26,7 +29,9 @@
                 <!--Boton borrar       -->
                 <a name="" id="" class="btn btn-danger" href="/borrar?id={{.Id}}" role="button">Borrar</a>
                 
-             
+                |  
+                <!--Boton despedir      -->
+                <a name="" id="" class="btn btn-dark" href="/despedir?id={{.Id}}" role="button">Despedir</a>
                 </td>
             </tr>
     {{end}}
