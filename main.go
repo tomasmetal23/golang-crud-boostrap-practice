@@ -1,11 +1,11 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
+	"time"
 	"html/template"
 	"net/http"
-
+	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -16,7 +16,7 @@ func conexionBD() (conexion *sql.DB) {
 	Password := "nEis4bGZe"
 	Nombre := "crud"
 
-	conexion, err := sql.Open(Driver, Usuario+":"+Password+"@tcp(10.89.2.2)/"+Nombre)
+	conexion, err := sql.Open(Driver, Usuario+":"+Password+"@tcp(192.168.192.33)/"+Nombre)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -50,7 +50,7 @@ func Inicio(w http.ResponseWriter, r *http.Request) {
 
 	conexionEstablecida := conexionBD()
 
-	registros, err := conexionEstablecida.Query("SELECT * FROM empleados")
+	registros, err := conexionEstablecida.Query("SELECT * FROM empleados WHERE fired_at IS NULL")
 
 	if err != nil {
 		panic(err.Error())
@@ -90,7 +90,7 @@ func Desempleados(w http.ResponseWriter, r *http.Request) {
 
 	conexionEstablecida := conexionBD()
 
-	desempleados, err := conexionEstablecida.Query("SELECT * FROM desempleados")
+	desempleados, err := conexionEstablecida.Query("SELECT * FROM empleados WHERE fired_at IS NOT NULL")
 
 	if err != nil {
 		panic(err.Error())
@@ -111,7 +111,6 @@ func Desempleados(w http.ResponseWriter, r *http.Request) {
 		desempleado.Correo = correo
 
 		arregloDesempleado = append(arregloDesempleado, desempleado)
-
 	}
 	//para mostrar el arreglo desempleado en la consola ##fmt.Println(arregloEmpleado)
 	plantillas.ExecuteTemplate(w, "desempleados", arregloDesempleado)
@@ -206,56 +205,39 @@ func Borrar(w http.ResponseWriter, r *http.Request) {
 
 // Funcion despedir
 func Despedir(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Despedir")
+
 	idEmpleado := r.URL.Query().Get("id")
 	fmt.Println(idEmpleado)
+	firedAt := time.Now()
 
 	conexionEstablecida := conexionBD()
-	//Instruccion SQL para copiar datos de una tabla a otra
-	despedirEmpleado, err := conexionEstablecida.Prepare("INSERT INTO desempleados SELECT * FROM empleados WHERE id=?")
+
+	despedirEmpleado, err := conexionEstablecida.Prepare(" UPDATE empleados SET fired_at=? WHERE id=? ")
 
 	if err != nil {
 		panic(err.Error())
 	}
-	despedirEmpleado.Exec(idEmpleado)
+	despedirEmpleado.Exec(firedAt, idEmpleado)
 
 	http.Redirect(w, r, "/", 301)
-
-	borrarRegistros, err := conexionEstablecida.Prepare("DELETE FROM empleados WHERE id=?")
-
-	if err != nil {
-		panic(err.Error())
-	}
-	borrarRegistros.Exec(idEmpleado)
-
-	http.Redirect(w, r, "/", 301)
-
 }
 
 // Funcion despedir
 func Recontratar(w http.ResponseWriter, r *http.Request) {
 	idEmpleado := r.URL.Query().Get("id")
-	fmt.Println(idEmpleado)
+	fmt.Println("idEmpleado")
 
 	conexionEstablecida := conexionBD()
-	//Instruccion SQL para copiar datos de una tabla a otra
-	despedirEmpleado, err := conexionEstablecida.Prepare("INSERT INTO empleados SELECT * FROM desempleados WHERE id=?")
+
+	despedirEmpleado, err := conexionEstablecida.Prepare(" UPDATE empleados SET fired_at=? WHERE id=? ")
 
 	if err != nil {
 		panic(err.Error())
 	}
-	despedirEmpleado.Exec(idEmpleado)
+	despedirEmpleado.Exec(nil, idEmpleado)
 
 	http.Redirect(w, r, "/", 301)
-
-	borrarRegistros, err := conexionEstablecida.Prepare("DELETE FROM desempleados WHERE id=?")
-
-	if err != nil {
-		panic(err.Error())
-	}
-	borrarRegistros.Exec(idEmpleado)
-
-	http.Redirect(w, r, "/", 301)
-
 }
 
 type Empleado struct {
