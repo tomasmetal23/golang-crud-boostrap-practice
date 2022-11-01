@@ -16,7 +16,7 @@ func conexionBD() (conexion *sql.DB) {
 	Password := "nEis4bGZe"
 	Nombre := "crud"
 
-	conexion, err := sql.Open(Driver, Usuario+":"+Password+"@tcp(10.89.2.2)/"+Nombre)
+	conexion, err := sql.Open(Driver, Usuario+":"+Password+"@tcp(192.168.192.33)/"+Nombre)
 	if err != nil {
 		panic(err.Error())
 	}
