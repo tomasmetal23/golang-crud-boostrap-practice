@@ -1,27 +1,29 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
-	"time"
 	"html/template"
 	"net/http"
-	"database/sql"
+	"time"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
 // Funcion para la conexion y autenticacion con la Base de datos
 func conexionBD() (conexion *sql.DB) {
 	Driver := "mysql"
-	Usuario := "root"
-	Password := "nEis4bGZe"
+	Usuario := "modavidc"
+	Password := "dI4+nTd_vzx3"
 	Nombre := "crud"
 
-	conexion, err := sql.Open(Driver, Usuario+":"+Password+"@tcp(192.168.192.33)/"+Nombre)
+	conexion, err := sql.Open(Driver, Usuario+":"+Password+"@tcp(127.0.1.1)/"+Nombre)
+
 	if err != nil {
 		panic(err.Error())
 	}
-	return conexion
 
+	return conexion
 }
 
 // plantilla
